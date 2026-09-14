@@ -1,3 +1,8 @@
+import {
+ collection,
+ onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import { collection, addDoc, getDocs }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -121,18 +126,87 @@ function getSummary(){
 }
 
 function renderDashboard(){
-  const {rows,norm,overall}=getSummary();
-  $('#statTotal').textContent=rows.length;
-  const counts={Shopee:0,Tokopedia:0,Lazada:0};rows.forEach(r=>{if(r.marketplace in counts)counts[r.marketplace]++});
-  const dominant=rows.length?Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0]:'—';
-  $('#statMarket').textContent=dominant;
-  $('#statSat').textContent=norm['E-Kepuasan']?norm['E-Kepuasan']+'/100':'—';
-  $('#statRep').textContent=norm['Niat Beli Ulang']?norm['Niat Beli Ulang']+'/100':'—';
-  $('#overallScore').textContent=overall;
-  $('#overallRing').style.background=`conic-gradient(#6b5cff ${overall*3.6}deg,#ffffff25 0deg)`;
-  $('#dashBars').innerHTML=constructLabels.map(k=>barHTML(k,norm[k])).join('');
-  drawRadar(norm);
-  renderInsights(norm);
+
+  onSnapshot(
+    collection(window.firebaseDB,"responses"),
+    (snapshot)=>{
+
+      const rows=[];
+
+      snapshot.forEach((doc)=>{
+        rows.push(doc.data());
+      });
+
+
+      const means = constructMeans(rows);
+
+      const norm={};
+
+      for(const [key,value] of Object.entries(means)){
+        norm[key]=normalized(value);
+      }
+
+
+      const vals=Object.values(norm).filter(v=>v>0);
+
+      const overall = vals.length 
+        ? Math.round(mean(vals))
+        : 0;
+
+
+      $('#statTotal').textContent = rows.length;
+
+
+      const counts={
+        Shopee:0,
+        Tokopedia:0,
+        Lazada:0
+      };
+
+
+      rows.forEach(r=>{
+        if(counts[r.marketplace]!==undefined){
+          counts[r.marketplace]++;
+        }
+      });
+
+
+      const dominant =
+      Object.entries(counts)
+      .sort((a,b)=>b[1]-a[1])[0][0];
+
+
+      $('#statMarket').textContent=dominant;
+
+
+      $('#statSat').textContent =
+      norm["E-Kepuasan"]
+      ? norm["E-Kepuasan"]+"/100"
+      : "-";
+
+
+      $('#statRep').textContent =
+      norm["Niat Beli Ulang"]
+      ? norm["Niat Beli Ulang"]+"/100"
+      : "-";
+
+
+      $('#overallScore').textContent=overall;
+
+
+      $('#dashBars').innerHTML =
+      constructLabels
+      .map(k=>barHTML(k,norm[k]))
+      .join("");
+
+
+      drawRadar(norm);
+
+      renderInsights(norm);
+
+    }
+  );
+
 }
 function barHTML(k,v){return `<div class="bar-row"><span>${k}</span><div class="bar-track"><div class="bar-fill" style="width:${v||0}%"></div></div><b>${v||0}</b></div>`}
 
