@@ -1,4 +1,12 @@
-import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function getFirebaseRows(){
+  const snapshot = await getDocs(collection(window.firebaseDB,"responses"));
+  const rows=[];
+  snapshot.forEach((doc)=>rows.push(doc.data()));
+  return rows;
+}
+
+import { collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const STORAGE='marketsense_plssem_responses';
@@ -197,16 +205,26 @@ function renderReport(){
 }
 $('#printBtn').onclick=()=>window.print();
 
-function renderData(){
-  const rows=getRows();
-  $('#dataRows').innerHTML=rows.slice().reverse().slice(0,12).map(r=>{
-    const sat=mean(['EK1','EK2','EK3_R','EK4','EK5_R','EK6'].map(c=>r[c]).filter(Boolean));
-    const rep=mean(['NMK1','NMK2'].map(c=>r[c]).filter(Boolean));
-    return `<tr><td>${new Date(r.timestamp).toLocaleString('id-ID')}</td><td>${r.marketplace||'-'}</td><td>${r.age||'-'}</td><td>${r.job||'-'}</td><td>${sat?sat.toFixed(2):'-'}</td><td>${rep?rep.toFixed(2):'-'}</td></tr>`
-  }).join('')||'<tr><td colspan="6">Belum ada respons.</td></tr>';
+async function renderData(){
+  const rows = await getFirebaseRows();
+
+  $('#dataRows').innerHTML =
+    rows.slice().reverse().slice(0,12).map(r=>{
+      const sat = mean(['EK1','EK2','EK3_R','EK4','EK5_R','EK6'].map(c=>r[c]).filter(Boolean));
+      const rep = mean(['NMK1','NMK2'].map(c=>r[c]).filter(Boolean));
+
+      return `<tr>
+        <td>${r.timestamp ? new Date(r.timestamp).toLocaleString('id-ID') : '-'}</td>
+        <td>${r.marketplace || '-'}</td>
+        <td>${r.age || '-'}</td>
+        <td>${r.job || '-'}</td>
+        <td>${sat ? sat.toFixed(2) : '-'}</td>
+        <td>${rep ? rep.toFixed(2) : '-'}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6">Belum ada respons.</td></tr>';
 }
 $('#exportCsvBtn').onclick=()=>{
-  const rows=getRows();if(!rows.length){showToast('Belum ada data.');return}
+  const rows=await getFirebaseRows();if(!rows.length){showToast('Belum ada data.');return}
   const cols=['timestamp','name','marketplace','gender','age','education','job','frequency','payment','KM1','KM2','KP1','KP2','KP3','KMP1','KMP2','KMP3','KMP4','KMP5','KMP6','MP1','MP2','MP3','EK1','EK2','EK3','EK3_R','EK4','EK5','EK5_R','EK6','NMK1','NMK2'];
   const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
   const csv=[cols.join(','),...rows.map(r=>cols.map(c=>esc(r[c])).join(','))].join('\n');
