@@ -20,157 +20,60 @@ nav{display:grid;gap:7px;margin-top:22px}.nav{border:0;background:transparent;co
 @media print{.sidebar,.topbar,.report-actions{display:none!important}.main{margin:0;padding:0;background:#fff}.view{display:none!important}#report.view{display:block!important}.report-sheet{border:0;box-shadow:none;max-width:none}.app{background:#fff}}
 
 
-/* ===== MOBILE RESPONSIVE FIX V7 ===== */
-@media (max-width: 768px){
+/* ===== V8 SAFE MOBILE FIX ===== */
+/* Tidak mengubah struktur layout, hanya memperbaiki touch/click */
 
-  body{
-    overflow-x:hidden;
-  }
-
-  .sidebar{
-    position:relative;
-    width:100%;
-    height:auto;
-    padding:16px;
-    display:block;
-  }
-
-  .brand{
-    padding-bottom:12px;
-  }
-
-  nav{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:8px;
-    margin-top:15px;
-  }
-
-  .nav{
-    font-size:13px;
-    padding:12px 8px;
-  }
-
-  .side-note{
-    display:none;
-  }
-
-  .main{
-    margin-left:0;
-    padding:16px;
-    width:100%;
-  }
-
-  .topbar{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:12px;
-  }
-
-  .topbar h1{
-    font-size:24px;
-  }
-
-  .hero-card{
-    display:block;
-    padding:20px;
-  }
-
-  .hero-card h2{
-    font-size:25px;
-  }
-
-  .hero-score{
-    margin-top:20px;
-  }
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .grid-2{
-    grid-template-columns:1fr;
-  }
-
-  .panel{
-    padding:15px;
-    border-radius:16px;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .market-select{
-    grid-template-columns:1fr;
-  }
-
-  .form-progress{
-    display:block;
-  }
-
-  .progress-track{
-    width:100%;
-    margin-top:12px;
-  }
-
-  .likert-item{
-    padding:14px;
-  }
-
-  .scale{
-    grid-template-columns:repeat(5,1fr);
-    gap:5px;
-  }
-
-  .scale label{
-    padding:12px 4px;
-    font-size:12px;
-  }
-
-  .form-actions{
-    position:sticky;
-    bottom:0;
-    background:white;
-    padding:12px 0;
-    z-index:10;
-  }
-
-  .form-actions .btn{
-    flex:1;
-  }
-
-  table{
-    min-width:650px;
-  }
-
-  .table-scroll{
-    overflow-x:auto;
-  }
-
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
-@media (max-width:430px){
+button,
+a,
+input,
+select,
+label {
+  touch-action: manipulation;
+}
 
-  nav{
-    grid-template-columns:1fr;
+@media (max-width: 720px) {
+
+  .main {
+    position: relative;
+    z-index: 2;
   }
 
-  .hero-actions{
-    display:flex;
-    flex-direction:column;
+  .sidebar {
+    position: relative;
+    z-index: 3;
   }
 
-  .hero-actions .btn{
-    width:100%;
+  .form-actions,
+  .btn {
+    position: relative;
+    z-index: 20;
+    pointer-events: auto;
   }
 
-  .scale label{
-    font-size:11px;
+  .hero-card,
+  .panel,
+  .q-card {
+    overflow: visible;
   }
 
-  .section-intro{
-    display:block;
+  .topbar {
+    position: relative;
+    z-index: 5;
   }
 
+  .scale label,
+  .option,
+  .market-select label {
+    cursor: pointer;
+    pointer-events: auto;
+  }
+}
+
+/* mencegah elemen transparan menutup tombol */
+.hidden {
+  pointer-events: none;
 }
