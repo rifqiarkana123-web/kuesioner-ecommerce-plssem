@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KUESIONER PENELITIAN E-COMMERCE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">MS</div>
+      <div>
+        <strong>MarketSense</strong>
+        <small>PLS-SEM Assessment</small>
+      </div>
+    </div>
+    <nav>
+      <button class="nav active" data-view="dashboard"><span>◫</span> Dashboard</button>
+      <button class="nav" data-view="questionnaire"><span>✎</span> Isi Kuesioner</button>
+      <button class="nav" data-view="results"><span>◎</span> Hasil Penilaian</button>
+      <button class="nav" data-view="model"><span>⌘</span> Model PLS-SEM</button>
+      <button class="nav" data-view="report"><span>▤</span> Laporan</button>
+      <button class="nav" data-view="data"><span>⇩</span> Data & Export</button>
+    </nav>
+    <div class="side-note">
+      <b>Prototype penelitian</b>
+      <p>Analisis PLS-SEM inferensial tetap dilakukan di SmartPLS. Web ini menangani pengumpulan data, scoring deskriptif, visualisasi, dan laporan.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Marketplace Research Platform</p>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="top-actions">
+        <span class="status-dot"></span><small>Local prototype</small>
+        <button class="btn ghost" id="quickFormBtn">Kuesioner</button>
+      </div>
+    </header>
+
+    <section class="view active" id="dashboard">
+      <div class="hero-card">
+        <div>
+          <span class="pill">PLS-SEM • E-Commerce</span>
+          <h2>Analisis Faktor-Faktor yang Memengaruhi E-Kepuasan dan Niat Beli Ulang Pengguna Marketplace Menggunakan Metode PLS-SEM</h2>
+          <p>Pengumpulan respons untuk pengguna Shopee, Tokopedia, dan Lazada dengan fokus pada Keamanan, Kepercayaan, Kemudahan, Privasi, E-Kepuasan, dan Niat Beli Ulang.</p>
+          <div class="hero-actions">
+            <button class="btn primary" data-go="questionnaire">Mulai Penilaian</button>
+            <button class="btn soft" data-go="model">Lihat Model</button>
+          </div>
+        </div>
+        <div class="hero-score">
+          <div class="score-ring" id="overallRing"><span id="overallScore">0</span><small>/100</small></div>
+          <b>Indeks Pengalaman</b>
+          <small>Rata-rata seluruh konstruk</small>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span>Total Respons</span><b id="statTotal">0</b><small>responden tersimpan</small></div>
+        <div class="stat"><span>Marketplace Dominan</span><b id="statMarket">—</b><small>paling banyak dipilih</small></div>
+        <div class="stat"><span>E-Kepuasan</span><b id="statSat">—</b><small>skor rata-rata</small></div>
+        <div class="stat"><span>Niat Beli Ulang</span><b id="statRep">—</b><small>skor rata-rata</small></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><small>RINGKASAN</small><h3>Skor per Konstruk</h3></div><span class="tag">0–100</span></div>
+          <div id="dashBars" class="bars"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><small>VISUALISASI</small><h3>Profil Konstruk</h3></div></div>
+          <svg id="radarChart" viewBox="0 0 420 330" class="radar"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><small>REKOMENDASI SISTEM</small><h3>Insight Otomatis</h3></div></div>
+        <div id="insightCards" class="insights"></div>
+      </div>
+    </section>
+
+    <section class="view" id="questionnaire">
+      <div class="panel">
+        <div class="form-progress">
+          <div><span id="stepLabel">Tahap 1 dari 9</span><h3 id="stepTitle">Persetujuan Responden</h3></div>
+          <div class="progress-track"><div id="progressFill"></div></div>
+        </div>
+        <form id="surveyForm">
+          <section class="step active" data-step="1" data-title="Persetujuan Responden">
+            <div class="q-card">
+              <h4>A1. Apakah Anda bersedia menjadi responden dalam penelitian ini?</h4>
+              <label class="option"><input type="radio" name="consent" value="Ya" required><span>Ya, saya bersedia</span></label>
+              <label class="option"><input type="radio" name="consent" value="Tidak"><span>Tidak bersedia</span></label>
+            </div>
+          </section>
+
+          <section class="step" data-step="2" data-title="Screening Responden">
+            <div class="q-card"><h4>B1. Apakah Anda pernah melakukan pembelian melalui Shopee, Tokopedia, atau Lazada dalam 6 bulan terakhir?</h4>
+              <label class="option"><input type="radio" name="b1" value="Ya" required><span>Ya</span></label>
+              <label class="option"><input type="radio" name="b1" value="Tidak"><span>Tidak</span></label>
+            </div>
+            <div class="q-card"><h4>B2. Apakah Anda telah melakukan pembelian melalui marketplace tersebut minimal 2 kali dalam 6 bulan terakhir?</h4>
+              <label class="option"><input type="radio" name="b2" value="Ya" required><span>Ya</span></label>
+              <label class="option"><input type="radio" name="b2" value="Tidak"><span>Tidak</span></label>
+            </div>
+            <div class="q-card">
+              <h4>B3. Marketplace manakah yang paling sering Anda gunakan dalam 6 bulan terakhir?</h4>
+              <div class="market-select">
+                <label><input type="radio" name="marketplace" value="Shopee" required><span>🛍️</span><b>Shopee</b></label>
+                <label><input type="radio" name="marketplace" value="Tokopedia"><span>🟢</span><b>Tokopedia</b></label>
+                <label><input type="radio" name="marketplace" value="Lazada"><span>🔵</span><b>Lazada</b></label>
+              </div>
+              <p class="help">Semua penilaian berikutnya dijawab berdasarkan marketplace yang dipilih di B3.</p>
+            </div>
+          </section>
+
+          <section class="step" data-step="3" data-title="Profil Responden">
+            <div class="form-grid"><label class="field">Nama Lengkap<input type="text" name="name" placeholder="Masukkan nama lengkap" required></label>
+              <label class="field">Jenis Kelamin<select name="gender" required><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></label>
+              <label class="field">Usia<select name="age" required><option value="">Pilih</option><option>17–24 tahun</option><option>25–31 tahun</option><option>32–37 tahun</option><option>&gt; 37 tahun</option></select></label>
+              <label class="field">Pendidikan Terakhir<select name="education" required><option value="">Pilih</option><option>SMA/sederajat</option><option>Diploma</option><option>S1</option><option>S2/S3</option><option>Lainnya</option></select></label>
+              <label class="field">Pekerjaan<select name="job" required><option value="">Pilih</option><option>Pelajar/Mahasiswa</option><option>Karyawan swasta</option><option>ASN/Pegawai pemerintah</option><option>Wirausaha</option><option>Ibu rumah tangga</option><option>Lainnya</option></select></label>
+              <label class="field">Frekuensi Pembelian<select name="frequency" required><option value="">Pilih</option><option>2 kali</option><option>3–5 kali</option><option>&gt; 5 kali</option></select></label>
+              <label class="field">Metode Pembayaran<select name="payment" required><option value="">Pilih</option><option>E-wallet</option><option>COD</option><option>Virtual Account</option><option>Transfer Bank</option><option>Kartu Kredit/Debit</option><option>Lainnya</option></select></label>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="4" data-title="Keamanan">
+            <div class="section-intro"><b>Keamanan</b><span>1 = Sangat Tidak Setuju • 5 = Sangat Setuju</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="KM1" data-text="Fitur keamanan merupakan hal yang penting bagi saya dalam keputusan pembelian produk di marketplace."></div>
+              <div class="likert" data-code="KM2" data-text="Akses pembayaran melalui pihak ketiga merupakan hal yang penting dalam keputusan pembelian produk di marketplace."></div>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="5" data-title="Kepercayaan">
+            <div class="section-intro"><b>Kepercayaan</b><span>Jawab berdasarkan pengalaman aktual.</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="KP1" data-text="Berdasarkan pengalaman, saya mengetahui bahwa penjual yang menjual produk di marketplace peduli pada pelanggan."></div>
+              <div class="likert" data-code="KP2" data-text="Berdasarkan pengalaman, saya mengetahui bahwa penjual yang menjual produk di marketplace bersifat oportunistik."></div>
+              <div class="likert" data-code="KP3" data-text="Berdasarkan pengalaman, saya mengetahui bahwa penjual yang menjual produk di marketplace itu jujur."></div>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="6" data-title="Kemudahan Penggunaan">
+            <div class="section-intro"><b>Kemudahan Penggunaan</b><span>Nilai pengalaman menggunakan aplikasi/web marketplace.</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="KMP1" data-text="Saya merasa marketplace mudah dioperasikan."></div>
+              <div class="likert" data-code="KMP2" data-text="Saya yakin dengan mudah dapat menggunakan marketplace untuk membeli produk apa saja yang saya inginkan."></div>
+              <div class="likert" data-code="KMP3" data-text="Saya menemukan transaksi online sederhana saat melakukan belanja di marketplace."></div>
+              <div class="likert" data-code="KMP4" data-text="Bagi saya membeli di marketplace adalah hal yang mudah."></div>
+              <div class="likert" data-code="KMP5" data-text="Interaksi saya dengan sistem online pada marketplace jelas dan mudah dipahami."></div>
+              <div class="likert" data-code="KMP6" data-text="Akan mudah untuk menjadi terampil dengan menggunakan aplikasi/web marketplace."></div>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="7" data-title="Privasi">
+            <div class="section-intro"><b>Privasi</b><span>Nilai persepsi terkait jaminan dan kendali informasi pribadi.</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="MP1" data-text="Bagi saya, jaminan privasi pihak ketiga dalam keputusan di marketplace adalah penting."></div>
+              <div class="likert" data-code="MP2" data-text="Bagi saya isi pernyataan kebijakan privasi dalam keputusan membeli di marketplace adalah penting."></div>
+              <div class="likert" data-code="MP3" data-text="Saya percaya bahwa saya mempunyai kendali atas bagaimana informasi yang saya berikan digunakan oleh marketplace."></div>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="8" data-title="E-Kepuasan">
+            <div class="section-intro"><b>E-Kepuasan</b><span>Item negatif tidak diberi label kepada responden.</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="EK1" data-text="Saya senang membeli produk di marketplace."></div>
+              <div class="likert" data-code="EK2" data-text="Saya puas dengan keputusan saya untuk membeli produk di marketplace."></div>
+              <div class="likert" data-code="EK3" data-text="Ketika ingin membeli produk lagi, saya akan merasa berbeda/aneh jika membeli di marketplace yang sama."></div>
+              <div class="likert" data-code="EK4" data-text="Pilihan saya untuk membeli produk di marketplace yang sama adalah keputusan yang bijaksana."></div>
+              <div class="likert" data-code="EK5" data-text="Saya merasa tidak nyaman atas keputusan saya membeli di marketplace yang sama."></div>
+              <div class="likert" data-code="EK6" data-text="Saya berpikir telah melakukan hal yang benar dengan membeli produk di marketplace yang sama."></div>
+            </div>
+          </section>
+
+          <section class="step likert-step" data-step="9" data-title="Niat Beli Ulang">
+            <div class="section-intro"><b>Niat Beli Ulang</b><span>Bagian terakhir.</span></div>
+            <div class="likert-list">
+              <div class="likert" data-code="NMK1" data-text="Saya ingin melakukan pembelian ulang pada marketplace yang sama."></div>
+              <div class="likert" data-code="NMK2" data-text="Kemauan saya untuk membeli ulang produk yang dijual pada marketplace yang sama cukup tinggi."></div>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="btn ghost" id="prevBtn">Kembali</button>
+            <button type="button" class="btn primary" id="nextBtn">Lanjut</button>
+            <button type="submit" class="btn primary hidden" id="submitBtn">Kirim Respons</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" id="results">
+      <div class="stats">
+        <div class="stat"><span>Indeks Pengalaman</span><b id="resultOverall">—</b><small>dari 100</small></div>
+        <div class="stat"><span>Konstruk Tertinggi</span><b id="bestConstruct">—</b><small>kekuatan utama</small></div>
+        <div class="stat"><span>Konstruk Terendah</span><b id="weakConstruct">—</b><small>prioritas perbaikan</small></div>
+        <div class="stat"><span>Data Valid Lokal</span><b id="validRows">0</b><small>respons tersimpan</small></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><small>SKOR DESKRIPTIF</small><h3>Raw Score & Normalized Score</h3></div></div>
+          <div id="scoreTableWrap"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><small>REKOMENDASI</small><h3>Prioritas Perbaikan</h3></div></div>
+          <div id="recommendations"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><small>ROADMAP</small><h3>Roadmap Peningkatan Pengalaman Pengguna</h3></div></div>
+        <div id="roadmap" class="roadmap"></div>
+      </div>
+    </section>
+
+    <section class="view" id="model">
+      <div class="panel">
+        <div class="panel-head"><div><small>STRUCTURAL MODEL</small><h3>Model Penelitian PLS-SEM</h3></div><span class="tag">9 jalur langsung</span></div>
+        <div class="model-diagram">
+          <div class="antecedents">
+            <div class="construct-card"><b>Keamanan</b><small>KM1–KM2</small></div>
+            <div class="construct-card"><b>Kepercayaan</b><small>KP1–KP3</small></div>
+            <div class="construct-card"><b>Kemudahan</b><small>KMP1–KMP6</small></div>
+            <div class="construct-card"><b>Privasi</b><small>MP1–MP3</small></div>
+          </div>
+          <div class="big-arrow">→</div>
+          <div class="construct-card focus"><b>E-Kepuasan</b><small>EK1–EK6</small></div>
+          <div class="big-arrow">→</div>
+          <div class="construct-card focus"><b>Niat Beli Ulang</b><small>NMK1–NMK2</small></div>
+        </div>
+        <p class="model-note">Jalur langsung dari Keamanan, Kepercayaan, Kemudahan, dan Privasi ke Niat Beli Ulang juga diuji. E-Kepuasan diposisikan sebagai mediator.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel"><div class="panel-head"><div><small>MEASUREMENT MODEL</small><h3>Outer Model</h3></div></div>
+          <ul class="checklist">
+            <li>Outer loading indikator</li><li>Cronbach's Alpha</li><li>Composite Reliability</li><li>Average Variance Extracted (AVE)</li><li>Discriminant Validity</li>
+          </ul>
+        </div>
+        <div class="panel"><div class="panel-head"><div><small>STRUCTURAL MODEL</small><h3>Inner Model</h3></div></div>
+          <ul class="checklist">
+            <li>Path coefficient</li><li>t-statistic dan p-value</li><li>R² E-Kepuasan</li><li>R² Niat Beli Ulang</li><li>Indirect effect / mediasi</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel warning">
+        <b>Catatan metodologis</b>
+        <p>Web ini tidak mengklaim menghitung PLS-SEM secara penuh. Dataset diekspor ke CSV dan hasil inferensial diolah di SmartPLS. Dashboard web menampilkan analisis deskriptif agar tidak mencampuradukkan scoring sederhana dengan estimasi PLS-SEM.</p>
+      </div>
+    </section>
+
+    <section class="view" id="report">
+      <div class="report-sheet" id="printArea">
+        <div class="report-head">
+          <div><small>LAPORAN PENILAIAN</small><h2>Marketplace Experience Report</h2><p id="reportDate"></p></div>
+          <div class="report-badge">PLS-SEM</div>
+        </div>
+        <div class="report-summary">
+          <div><span>Total Respons</span><b id="reportTotal">0</b></div>
+          <div><span>Indeks Pengalaman</span><b id="reportIndex">0/100</b></div>
+          <div><span>Marketplace Dominan</span><b id="reportMarket">—</b></div>
+        </div>
+        <h3>Ringkasan Konstruk</h3>
+        <div id="reportTable"></div>
+        <h3>Analisis Sistem</h3>
+        <div id="reportAnalysis" class="report-text"></div>
+        <h3>Rekomendasi</h3>
+        <div id="reportRecs" class="report-text"></div>
+        <div class="report-footer">Prototype MarketSense • Data lokal browser</div>
+      </div>
+      <div class="report-actions">
+        <button class="btn primary" id="printBtn">Cetak / Simpan PDF</button>
+      </div>
+    </section>
+
+    <section class="view" id="data">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><small>DATASET</small><h3>Export untuk SmartPLS</h3></div></div>
+          <p class="muted">CSV berisi demografi, marketplace, dan seluruh indikator. EK3 dan EK5 memiliki kolom reverse-coded tambahan.</p>
+          <button class="btn primary" id="exportCsvBtn">Download CSV</button>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><small>BACKUP</small><h3>Data Lokal</h3></div></div>
+          <p class="muted">Prototype menyimpan respons pada browser yang digunakan. Untuk produksi multi-user diperlukan database/backend.</p>
+          <button class="btn danger" id="clearBtn">Hapus Semua Data Lokal</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><small>RESPONS TERBARU</small><h3>Preview Data</h3></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Waktu</th><th>Marketplace</th><th>Usia</th><th>Pekerjaan</th><th>E-Kepuasan</th><th>Niat Beli Ulang</th></tr></thead><tbody id="dataRows"></tbody></table></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+<script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

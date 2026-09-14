@@ -1,0 +1,7 @@
+Firebase V4 connection preparation
+
+- firebase-config.js added
+- Firestore collection target: responses
+
+Next coding step:
+Replace localStorage submit handler with addDoc(collection(firebaseDB,'responses'), data).
