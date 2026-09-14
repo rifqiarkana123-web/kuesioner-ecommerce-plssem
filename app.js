@@ -83,13 +83,31 @@ function screeningOK(){
 }
 $('#nextBtn').onclick=()=>{if(!stepValid()){showToast('Lengkapi bagian ini terlebih dahulu.');return} if(!screeningOK())return; if(currentStep<totalSteps){currentStep++;updateStep();window.scrollTo({top:0,behavior:'smooth'})}};
 $('#prevBtn').onclick=()=>{if(currentStep>1){currentStep--;updateStep();window.scrollTo({top:0,behavior:'smooth'})}};
-$('#surveyForm').addEventListener('submit',e=>{
+$('#surveyForm').addEventListener('submit', async e=>{
   e.preventDefault(); if(!stepValid())return;
   const d=Object.fromEntries(new FormData(e.target).entries());
   d.timestamp=new Date().toISOString();
   if(d.EK3)d.EK3_R=String(6-Number(d.EK3));
   if(d.EK5)d.EK5_R=String(6-Number(d.EK5));
-  const rows=getRows();rows.push(d);setRows(rows);
+  try {
+
+  await addDoc(collection(window.firebaseDB, "responses"), d);
+
+  alert("Jawaban berhasil dikirim!");
+
+  e.target.reset();
+
+  currentStep = 1;
+  updateStep();
+
+  setView("results");
+
+} catch(error){
+
+  console.error("Error:", error);
+  alert("Gagal menyimpan data");
+
+}
   e.target.reset();currentStep=1;updateStep();showToast('Respons berhasil disimpan.');
   setView('results');
 });
