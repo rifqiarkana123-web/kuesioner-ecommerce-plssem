@@ -1,5 +1,3 @@
-import { collection, onSnapshot } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function getFirebaseRows(){
   const snapshot = await getDocs(collection(window.firebaseDB,"responses"));
