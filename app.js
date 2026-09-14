@@ -1,10 +1,4 @@
-import {
- collection,
- onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import { collection, addDoc, getDocs }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const STORAGE='marketsense_plssem_responses';
@@ -88,31 +82,13 @@ function screeningOK(){
 }
 $('#nextBtn').onclick=()=>{if(!stepValid()){showToast('Lengkapi bagian ini terlebih dahulu.');return} if(!screeningOK())return; if(currentStep<totalSteps){currentStep++;updateStep();window.scrollTo({top:0,behavior:'smooth'})}};
 $('#prevBtn').onclick=()=>{if(currentStep>1){currentStep--;updateStep();window.scrollTo({top:0,behavior:'smooth'})}};
-$('#surveyForm').addEventListener('submit', async e=>{
+$('#surveyForm').addEventListener('submit',e=>{
   e.preventDefault(); if(!stepValid())return;
   const d=Object.fromEntries(new FormData(e.target).entries());
   d.timestamp=new Date().toISOString();
   if(d.EK3)d.EK3_R=String(6-Number(d.EK3));
   if(d.EK5)d.EK5_R=String(6-Number(d.EK5));
-  try {
-
-  await addDoc(collection(window.firebaseDB, "responses"), d);
-
-  alert("Jawaban berhasil dikirim!");
-
-  e.target.reset();
-
-  currentStep = 1;
-  updateStep();
-
-  setView("results");
-
-} catch(error){
-
-  console.error("Error:", error);
-  alert("Gagal menyimpan data");
-
-}
+  const rows=getRows();rows.push(d);setRows(rows);
   e.target.reset();currentStep=1;updateStep();showToast('Respons berhasil disimpan.');
   setView('results');
 });
@@ -126,87 +102,28 @@ function getSummary(){
 }
 
 function renderDashboard(){
-
-  onSnapshot(
-    collection(window.firebaseDB,"responses"),
-    (snapshot)=>{
-
-      const rows=[];
-
-      snapshot.forEach((doc)=>{
-        rows.push(doc.data());
-      });
-
-
-      const means = constructMeans(rows);
-
-      const norm={};
-
-      for(const [key,value] of Object.entries(means)){
-        norm[key]=normalized(value);
-      }
-
-
-      const vals=Object.values(norm).filter(v=>v>0);
-
-      const overall = vals.length 
-        ? Math.round(mean(vals))
-        : 0;
-
-
-      $('#statTotal').textContent = rows.length;
-
-
-      const counts={
-        Shopee:0,
-        Tokopedia:0,
-        Lazada:0
-      };
-
-
-      rows.forEach(r=>{
-        if(counts[r.marketplace]!==undefined){
-          counts[r.marketplace]++;
-        }
-      });
-
-
-      const dominant =
-      Object.entries(counts)
-      .sort((a,b)=>b[1]-a[1])[0][0];
-
-
-      $('#statMarket').textContent=dominant;
-
-
-      $('#statSat').textContent =
-      norm["E-Kepuasan"]
-      ? norm["E-Kepuasan"]+"/100"
-      : "-";
-
-
-      $('#statRep').textContent =
-      norm["Niat Beli Ulang"]
-      ? norm["Niat Beli Ulang"]+"/100"
-      : "-";
-
-
-      $('#overallScore').textContent=overall;
-
-
-      $('#dashBars').innerHTML =
-      constructLabels
-      .map(k=>barHTML(k,norm[k]))
-      .join("");
-
-
-      drawRadar(norm);
-
-      renderInsights(norm);
-
-    }
-  );
-
+  let rows=[];
+  onSnapshot(collection(window.firebaseDB,"responses"),(snapshot)=>{
+    rows=[];
+    snapshot.forEach((doc)=>rows.push(doc.data()));
+    const summaryRows = rows;
+    const means = constructMeans(summaryRows);
+    const norm = {};
+    Object.entries(means).forEach(([k,v])=>norm[k]=normalized(v));
+    const vals=Object.values(norm).filter(v=>v>0);
+    const overall=vals.length ? Math.round(mean(vals)) : 0;
+  $('#statTotal').textContent=rows.length;
+  const counts={Shopee:0,Tokopedia:0,Lazada:0};rows.forEach(r=>{if(r.marketplace in counts)counts[r.marketplace]++});
+  const dominant=rows.length?Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0]:'—';
+  $('#statMarket').textContent=dominant;
+  $('#statSat').textContent=norm['E-Kepuasan']?norm['E-Kepuasan']+'/100':'—';
+  $('#statRep').textContent=norm['Niat Beli Ulang']?norm['Niat Beli Ulang']+'/100':'—';
+  $('#overallScore').textContent=overall;
+  $('#overallRing').style.background=`conic-gradient(#6b5cff ${overall*3.6}deg,#ffffff25 0deg)`;
+  $('#dashBars').innerHTML=constructLabels.map(k=>barHTML(k,norm[k])).join('');
+  drawRadar(norm);
+  renderInsights(norm);
+  });
 }
 function barHTML(k,v){return `<div class="bar-row"><span>${k}</span><div class="bar-track"><div class="bar-fill" style="width:${v||0}%"></div></div><b>${v||0}</b></div>`}
 
