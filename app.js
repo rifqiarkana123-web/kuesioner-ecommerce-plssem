@@ -26,6 +26,37 @@ let unsubscribeResponses = null;
 let currentStep = 1;
 const totalSteps = 9;
 
+
+const sidebar = $('#sidebar');
+const mobileBackdrop = $('#mobileBackdrop');
+const menuToggle = $('#menuToggle');
+
+function updateMenuButton(isOpen) {
+  if (!menuToggle) return;
+  menuToggle.textContent = isOpen ? '‹' : '›';
+  menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  menuToggle.setAttribute('aria-label', isOpen ? 'Tutup sidebar' : 'Buka sidebar');
+}
+
+function openMobileMenu() {
+  if (sidebar) sidebar.classList.add('open');
+  if (mobileBackdrop) mobileBackdrop.classList.remove('hidden');
+  document.body.classList.add('menu-open');
+  updateMenuButton(true);
+}
+
+function closeMobileMenu() {
+  if (sidebar) sidebar.classList.remove('open');
+  if (mobileBackdrop) mobileBackdrop.classList.add('hidden');
+  document.body.classList.remove('menu-open');
+  updateMenuButton(false);
+}
+
+function toggleMobileMenu() {
+  if (sidebar && sidebar.classList.contains('open')) closeMobileMenu();
+  else openMobileMenu();
+}
+
 function showToast(message) {
   const toast = $('#toast');
   if (!toast) return;
@@ -99,6 +130,7 @@ function setView(id) {
   if (id === 'report') renderReport();
   if (id === 'data') renderData();
 
+  closeMobileMenu();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -201,8 +233,8 @@ function drawRadar(norm) {
     const r = radius * (norm[name] || 0) / 100;
     return [cx + Math.cos(angle) * r, cy + Math.sin(angle) * r];
   });
-  html += `<polygon points="${polygon(dataPoints)}" fill="rgba(107,92,255,.20)" stroke="#6b5cff" stroke-width="3"/>`;
-  dataPoints.forEach(point => { html += `<circle cx="${point[0]}" cy="${point[1]}" r="4" fill="#6b5cff"/>`; });
+  html += `<polygon points="${polygon(dataPoints)}" fill="rgba(230,57,70,.20)" stroke="#e63946" stroke-width="3"/>`;
+  dataPoints.forEach(point => { html += `<circle cx="${point[0]}" cy="${point[1]}" r="4" fill="#e63946"/>`; });
   svg.innerHTML = html;
 }
 
@@ -234,7 +266,7 @@ function renderDashboard() {
   $('#statSat').textContent = norm['E-Kepuasan'] ? `${norm['E-Kepuasan']}/100` : '—';
   $('#statRep').textContent = norm['Niat Beli Ulang'] ? `${norm['Niat Beli Ulang']}/100` : '—';
   $('#overallScore').textContent = overall;
-  $('#overallRing').style.background = `conic-gradient(#6b5cff ${overall * 3.6}deg,#ffffff25 0deg)`;
+  $('#overallRing').style.background = `conic-gradient(#e63946 ${overall * 3.6}deg,#ffffff25 0deg)`;
   $('#dashBars').innerHTML = constructLabels.map(name => barHTML(name, norm[name])).join('');
   drawRadar(norm);
   renderInsights(norm);
@@ -381,6 +413,10 @@ async function initializeFirebase() {
 }
 
 // Event UI dipasang sebelum koneksi Firebase, jadi navigasi tetap dapat diklik walau jaringan bermasalah.
+
+if (menuToggle) menuToggle.addEventListener('click', toggleMobileMenu);
+if (mobileBackdrop) mobileBackdrop.addEventListener('click', closeMobileMenu);
+
 $$('.nav').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
 $$('[data-go]').forEach(button => button.addEventListener('click', () => setView(button.dataset.go)));
 $('#nextBtn').addEventListener('click', () => {
