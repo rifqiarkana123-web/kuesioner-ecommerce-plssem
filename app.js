@@ -414,7 +414,10 @@ async function initializeFirebase() {
 
 // Event UI dipasang sebelum koneksi Firebase, jadi navigasi tetap dapat diklik walau jaringan bermasalah.
 
+const drawerCloseBtn = $('#drawerCloseBtn');
+
 if (menuToggle) menuToggle.addEventListener('click', toggleMobileMenu);
+if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileMenu);
 if (mobileBackdrop) mobileBackdrop.addEventListener('click', closeMobileMenu);
 
 $$('.nav').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
