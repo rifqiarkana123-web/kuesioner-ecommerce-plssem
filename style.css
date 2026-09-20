@@ -348,98 +348,63 @@ table{width:100%;border-collapse:collapse}
 }
 
 
-/* ===== V13 MOBILE SIDEBAR CLICK FIX ===== */
+/* ===== V15 DRAWER PROPER FIX ===== */
 
-/* tombol drawer selalu berada paling atas */
-.drawer-toggle,
-#menuToggle,
-#sidebarToggle {
-  position: fixed;
-  left: 14px;
+/* tombol buka di luar drawer */
+.menu-toggle {
+  position: fixed !important;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2000;
-  pointer-events: auto;
+  z-index: 4000 !important;
 }
 
-/* sidebar menerima klik */
-.sidebar,
-.sidebar.open {
-  pointer-events: auto;
-  z-index: 1500;
-}
-
-/* backdrop hanya di belakang sidebar */
-.mobile-backdrop {
-  z-index: 1400;
-  background: rgba(0,0,0,.18);
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  pointer-events: auto;
-}
-
-/* tombol dan menu tidak tertutup layer lain */
-.sidebar button,
-.nav,
-.sidebar a {
-  position: relative;
-  z-index: 2001;
-  pointer-events: auto;
+/* tombol tutup menjadi bagian drawer */
+.drawer-toggle-inside {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   cursor: pointer;
+  background: linear-gradient(135deg,#ff4d6d,#ff9f68);
+  color: white;
+  font-size: 26px;
+  font-weight: 900;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-bottom: 12px;
+}
+
+.sidebar.open .drawer-toggle-inside {
+  display: flex;
 }
 
 @media(max-width:900px){
-  .sidebar{
-    transform:translateX(-110%);
-    transition:transform .25s ease;
+
+  .sidebar {
+    z-index: 3500 !important;
   }
-  .sidebar.open{
-    transform:translateX(0);
-  }
-  .main{
-    position:relative;
-    z-index:1;
-  }
-}
 
-
-/* ===== V14 FINAL DRAWER LAYER FIX ===== */
-
-/* sidebar harus menjadi layer utama saat terbuka */
-.sidebar.open {
-  z-index: 3000 !important;
-}
-
-/* menu di dalam sidebar selalu dapat menerima tap */
-.sidebar.open .nav,
-.sidebar.open button {
-  position: relative;
-  z-index: 3002;
-  pointer-events: auto !important;
-}
-
-/* tombol panah tidak menutup area menu */
-body.menu-open .menu-toggle {
-  z-index: 2990;
-}
-
-/* khusus mobile: drawer menutup area tombol lama */
-@media (max-width:900px){
   .sidebar.open {
-    transform: translateX(0);
+    transform: translateX(0) !important;
+  }
+
+  .sidebar.open ~ .main {
+    pointer-events:none;
   }
 
   body.menu-open .menu-toggle {
-    left: calc(min(86vw, 320px) + 12px);
-    z-index: 2500;
+    opacity:0;
+    pointer-events:none;
   }
 
   .mobile-backdrop {
-    z-index: 2000 !important;
-    pointer-events: auto;
+    z-index:3000 !important;
   }
 
-  .sidebar.open + .mobile-backdrop {
-    pointer-events: none;
+  .drawer-toggle-inside {
+    position:relative;
+    z-index:4001;
   }
 }
