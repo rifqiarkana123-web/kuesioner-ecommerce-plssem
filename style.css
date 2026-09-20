@@ -401,3 +401,45 @@ table{width:100%;border-collapse:collapse}
     z-index:1;
   }
 }
+
+
+/* ===== V14 FINAL DRAWER LAYER FIX ===== */
+
+/* sidebar harus menjadi layer utama saat terbuka */
+.sidebar.open {
+  z-index: 3000 !important;
+}
+
+/* menu di dalam sidebar selalu dapat menerima tap */
+.sidebar.open .nav,
+.sidebar.open button {
+  position: relative;
+  z-index: 3002;
+  pointer-events: auto !important;
+}
+
+/* tombol panah tidak menutup area menu */
+body.menu-open .menu-toggle {
+  z-index: 2990;
+}
+
+/* khusus mobile: drawer menutup area tombol lama */
+@media (max-width:900px){
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  body.menu-open .menu-toggle {
+    left: calc(min(86vw, 320px) + 12px);
+    z-index: 2500;
+  }
+
+  .mobile-backdrop {
+    z-index: 2000 !important;
+    pointer-events: auto;
+  }
+
+  .sidebar.open + .mobile-backdrop {
+    pointer-events: none;
+  }
+}
