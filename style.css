@@ -346,3 +346,58 @@ table{width:100%;border-collapse:collapse}
   .report-sheet{border:0;box-shadow:none;max-width:none;padding:0}
   body{background:#fff}
 }
+
+
+/* ===== V13 MOBILE SIDEBAR CLICK FIX ===== */
+
+/* tombol drawer selalu berada paling atas */
+.drawer-toggle,
+#menuToggle,
+#sidebarToggle {
+  position: fixed;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2000;
+  pointer-events: auto;
+}
+
+/* sidebar menerima klik */
+.sidebar,
+.sidebar.open {
+  pointer-events: auto;
+  z-index: 1500;
+}
+
+/* backdrop hanya di belakang sidebar */
+.mobile-backdrop {
+  z-index: 1400;
+  background: rgba(0,0,0,.18);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  pointer-events: auto;
+}
+
+/* tombol dan menu tidak tertutup layer lain */
+.sidebar button,
+.nav,
+.sidebar a {
+  position: relative;
+  z-index: 2001;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-110%);
+    transition:transform .25s ease;
+  }
+  .sidebar.open{
+    transform:translateX(0);
+  }
+  .main{
+    position:relative;
+    z-index:1;
+  }
+}
