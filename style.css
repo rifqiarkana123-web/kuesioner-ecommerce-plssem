@@ -408,3 +408,39 @@ table{width:100%;border-collapse:collapse}
     z-index:4001;
   }
 }
+
+
+/* ===== V16 TRUE MOBILE DRAWER FIX =====
+   Root cause: backdrop sebelumnya berada di luar .app, sedangkan .app membuat
+   stacking context sendiri (z-index:1). Akibatnya backdrop selalu berada di
+   atas sidebar di mobile dan menyerap semua tap. Backdrop sekarang dipindah
+   ke dalam .app sehingga urutan layer benar. */
+
+@media (max-width:900px){
+  .mobile-backdrop{
+    z-index:3000 !important;
+    pointer-events:auto !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .sidebar,
+  .sidebar.open{
+    z-index:3500 !important;
+    pointer-events:auto !important;
+  }
+
+  .sidebar nav,
+  .sidebar .nav,
+  .drawer-toggle-inside{
+    position:relative;
+    z-index:3501 !important;
+    pointer-events:auto !important;
+  }
+
+  body.menu-open .menu-toggle{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+}
